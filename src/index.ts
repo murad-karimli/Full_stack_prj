@@ -1,22 +1,51 @@
 import express from "express";
 import http from "http";
-import bodyParser from "body-parser"
+import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
-import compression from 'compression';
+import compression from "compression";
 import cors from "cors";
+import router from '../src/routers/register';
 
-const app =express();
+import mongoose from "mongoose";
+import { getUsers } from "../src/models/users";
 
-app.use(cors({
-    credentials:true
-}));
+const app = express();
+mongoose.Promise = global.Promise;
+mongoose
+  .connect("mongodb://mongo_db:27017/my_db", {})
+  .then(() => {
+    console.log("successfully connected to the database");
+  })
+  .catch((err) => {
+    console.log("error connecting to the database", err);
+    process.exit();
+  });
+
+app.use(
+  cors({
+    credentials: true,
+  })
+);
 
 app.use(compression());
 app.use(cookieParser());
 app.use(bodyParser.json());
 
-const server= http.createServer(app);
+app.use('/api/v1',router)
 
-server.listen(8080,()=>{
-    console.log("Server is running on http://localhost:8080/")
+
+
+const server = http.createServer(app);
+
+server.listen(8080, () => {
+  console.log("Server is running on http://localhost:8080/");
+});
+
+app.get('/',async(req,res)=>{
+    res.send({message:"SALAM QAQA"}).status(200)
+})
+app.get('/users',async(req,res)=>{
+    const user=await getUsers()
+    console.log(user)
+    res.send(user)
 })
