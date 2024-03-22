@@ -10,7 +10,6 @@ services:
       - .envs/.env.local
     volumes: 
       - mongo_db:/data/db
- 
   #node api container
   api:
     build: .

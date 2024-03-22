@@ -2,29 +2,27 @@ import { getUserByEmail } from "../models/users";
 import { LoginError } from "../helpers/errors";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+
 require("dotenv").config();
+enum AuthErrors {
+  UserDoesNotExist = "User does not exists",
+  InvalidPassword = "Password is invalid",
+}
 
 export const loginUser = async (userData: any): Promise<any> => {
-  const { email, password } = userData.body;
-  if (!email || !password) {
-    throw new LoginError({
-      name: "EMAIL_AND_PASSWORD_REQUIRED",
-      message: "Password and email are required for logging in",
-    });
-  }
+  const { email, password } = userData;
 
   const user = await getUserByEmail(email);
-
   if (!user)
     throw new LoginError({
-      name: "USER_DOES_NOT_FOUND",
+      name: AuthErrors.UserDoesNotExist,
       message: "User is not found with this email address",
     });
 
   const isPasswordValid = await bcrypt.compare(password, user.password);
   if (!isPasswordValid)
     throw new LoginError({
-      name: "INVALID_PASSWORD",
+      name: AuthErrors.InvalidPassword,
       message: "You have entered incorrect password",
     });
   console.log(isPasswordValid);
