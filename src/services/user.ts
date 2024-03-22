@@ -4,6 +4,7 @@ import express from "express";
 import { userSchema } from "../schemas/user";
 
 export const checkAndRegister = async (req: any): Promise<any> => {
+  
   try {
     const result = await userSchema.validateAsync(req);
 
@@ -27,7 +28,7 @@ export const checkAndRegister = async (req: any): Promise<any> => {
       message: `${result.email} is already registered`,
     };
   } catch (err) {
-    console.error('Error in checkAndRegister:', err);
+    console.error("Error in checkAndRegister:", err);
     return { success: false, message: err };
   }
 };

@@ -1,10 +1,8 @@
-const SECRET='b536a4f3-d597-4136-bc01-58b9ef4a639f'
-const bcrypt = require('bcrypt');
-const saltRounds = 10; 
+const bcrypt = require("bcrypt");
 
-export const hashPassword = async (plainTextPassword:string) => {
+export const hashPassword = async (plainTextPassword: string) => {
   try {
-    const salt = await bcrypt.genSalt(saltRounds);
+    const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(plainTextPassword, salt);
     return hashedPassword;
   } catch (error) {
