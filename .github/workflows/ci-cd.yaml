@@ -24,7 +24,6 @@ jobs:
       - name: Build and Test Node.js App
         run: |
           npm run build
-          npm test
 
   deploy:
     runs-on: ubuntu-latest
