@@ -4,8 +4,7 @@ import bcrypt from "bcrypt";
 const UserSchema = new mongoose.Schema({
   username: { type: String, require: true },
   email: { type: String, required: true },
-  password: { type: String, required: true, select: false },
-  refresh_token: { type: String, required: false, select: true },
+  password: { type: String, required: true, select: false }
 });
 
 UserSchema.methods.comparePassword = async function (

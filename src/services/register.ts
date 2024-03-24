@@ -1,6 +1,7 @@
 import { getAUser } from "../models/users";
 import { hashPassword } from "../helpers/index";
 import { RegisterError } from "../helpers/errors";
+import { logAsync } from "../controllers/logger";
 enum RegisterErrors {
   AlreadyRegistered = "Email is already registered",
 }
@@ -13,6 +14,7 @@ export const checkAndRegister = async (userData: any): Promise<any> => {
       throw new RegisterError({
         name: RegisterErrors.AlreadyRegistered,
         message: `${userData.email} is already registered`,
+        statusCode:422
       });
     }
     const hashedPassword = await hashPassword(userData.password);
@@ -24,7 +26,8 @@ export const checkAndRegister = async (userData: any): Promise<any> => {
       },
     };
   } catch (err) {
+    await logAsync("error","error happened in registering user")
     console.error("Error in checkAndRegister:", err);
-    return { success: false, message: err };
+    throw err;
   }
 };

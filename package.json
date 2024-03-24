@@ -36,6 +36,7 @@
     "http-errors": "^2.0.0",
     "joi": "^17.12.2",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.2.1"
+    "mongoose": "^8.2.1",
+    "winston": "^3.12.0"
   }
 }
