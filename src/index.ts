@@ -11,6 +11,9 @@ import { getUsers } from "../src/models/users";
 import { errorHandler } from "./middlewares/errorMiddleware";
 import { logAsync } from "./controllers/logger";
 import Refreshrouter from "./routers/refreshToken";
+import urlRouter from "./routers/urlShortener";
+import allUrlRouter from "./routers/allUrls";
+import redirectRouter from "./routers/redirect";
 
 const app = express();
 mongoose.Promise = global.Promise;
@@ -31,7 +34,10 @@ app.use(bodyParser.json());
 
 app.use("/api/v1", router);
 app.use("/api/v1", loginRouter);
-app.use("/api/v1",Refreshrouter)
+app.use("/api/v1",Refreshrouter);
+app.use("/api/v1",urlRouter)
+app.use("/api/v1",allUrlRouter)
+app.use("/api/v1",redirectRouter)
 
 app.use(async(req, res, next) => {
   await logAsync("info", `Request URL: ${req.originalUrl}`);
