@@ -10,6 +10,7 @@ import mongoose from "mongoose";
 import { getUsers } from "../src/models/users";
 import { errorHandler } from "./middlewares/errorMiddleware";
 import { logAsync } from "./controllers/logger";
+import Refreshrouter from "./routers/refreshToken";
 
 const app = express();
 mongoose.Promise = global.Promise;
@@ -30,6 +31,7 @@ app.use(bodyParser.json());
 
 app.use("/api/v1", router);
 app.use("/api/v1", loginRouter);
+app.use("/api/v1",Refreshrouter)
 
 app.use(async(req, res, next) => {
   await logAsync("info", `Request URL: ${req.originalUrl}`);

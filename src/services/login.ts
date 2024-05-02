@@ -5,9 +5,16 @@ import jwt from "jsonwebtoken";
 import { logAsync } from "../controllers/logger";
 
 require("dotenv").config();
+
 enum AuthErrors {
   UserDoesNotExist = "User does not exists",
   InvalidPassword = "Password is invalid",
+}
+
+interface UserData {
+  email: string;
+  password: string;
+  access_token?: string;
 }
 
 export const loginUser = async (userData: any): Promise<any> => {
@@ -29,7 +36,7 @@ export const loginUser = async (userData: any): Promise<any> => {
         message: "You have entered incorrect password",
         statusCode: 422,
       });
-    console.log(isPasswordValid);
+
     const accessToken = jwt.sign(
       { email: user.email, id: user._id },
       process.env.ACCESS_TOKEN_SECRET,
@@ -37,19 +44,18 @@ export const loginUser = async (userData: any): Promise<any> => {
         expiresIn: "15m",
       }
     );
-    console.log(accessToken);
-    const data = {
-      success: true,
-      message: "User is authenticated",
-      username: userData.username,
-      email: userData.username,
-      _id: userData._id,
-      access_token: accessToken,
-    };
-    return { success: true, data };
+    const refreshToken = jwt.sign(
+      { email: user.email, id: user._id },
+      process.env.REFRESH_TOKEN_SECRET,
+      {
+        expiresIn: "7d", 
+      }
+    );
+
+    return { success: true, data: { email: user.email, username: user.username, access_token: accessToken, refresh_token: refreshToken } };
   } catch (err) {
-   //await  logAsync("error","error happened in login")
     console.log("error happened in login", err);
     throw err;
   }
 };
+
