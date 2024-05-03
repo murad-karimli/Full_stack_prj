@@ -5,10 +5,15 @@ export enum AuthErrors {
   TokenIsNotValid = "Token is invalid",
   NotAuthenticated = "You are not authenticeted",
 }
+
+export enum ShortenerErrors {
+  NotFound = "Shortened URL not found",
+}
 enum RegisterErrors {
   AlreadyRegistered = "Email is already registered",
 }
 
 export class LoginError extends ErrorBase<AuthErrors> {}
+export class ShortenerError extends ErrorBase<ShortenerErrors>{}
 
 export class RegisterError extends ErrorBase<RegisterErrors> {}
